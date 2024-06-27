@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:testpaper_task/view/registration_screen/registration_screen.dart';
 
+String useremail = "";
+String userpassword = "";
 void main() {
   runApp(MyApp());
 }

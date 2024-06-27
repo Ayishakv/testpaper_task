@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:testpaper_task/main.dart';
 import 'package:testpaper_task/view/home_screen/home_screen.dart';
 
 class Login_screen extends StatelessWidget {
-  const Login_screen(
-      {super.key, required this.storedemail, required this.storedpass});
-  final String storedemail;
-  final String storedpass;
+  const Login_screen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formkey = GlobalKey<FormState>();
+    TextEditingController emailcontroller = TextEditingController();
+    TextEditingController passcontroller = TextEditingController();
 
     return Scaffold(
       body: Padding(
@@ -32,11 +34,14 @@ class Login_screen extends StatelessWidget {
                 height: 30,
               ),
               TextFormField(
+                controller: emailcontroller,
                 validator: (value) {
-                  if (value == storedemail) {
+                  if (value == null || value.isEmpty) {
+                    return "Enter valid email";
+                  } else if (value.contains("@")) {
                     return null;
                   } else {
-                    return "wrong email";
+                    return "invalid email";
                   }
                 },
                 decoration: InputDecoration(
@@ -48,11 +53,12 @@ class Login_screen extends StatelessWidget {
                 height: 20,
               ),
               TextFormField(
+                controller: passcontroller,
                 validator: (value) {
-                  if (value == storedpass) {
-                    return null;
+                  if (value!.length < 6) {
+                    return "password too short";
                   } else {
-                    return "wrong password";
+                    return null;
                   }
                 },
                 decoration: InputDecoration(
@@ -84,15 +90,18 @@ class Login_screen extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () {
                       if (formkey.currentState!.validate()) {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Home_screen(),
-                            ),
-                            (route) => false);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("invalid credentials")));
+                        if (emailcontroller.text == useremail &&
+                            passcontroller.text == userpassword) {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Home_screen(),
+                              ),
+                              (route) => false);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("invalid credentials")));
+                        }
                       }
                     },
                     child: Text(
@@ -100,10 +109,11 @@ class Login_screen extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.blue),
-                      shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                    )),
+                        backgroundColor: WidgetStatePropertyAll(Colors.blue),
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ))),
               )
             ],
           ),
